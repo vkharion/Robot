@@ -26,7 +26,8 @@ extension Command {
     }
     
     init?(value: String) {
-        switch value {
+        let trimmedValue = value.trimmingCharacters(in: CharacterSet.whitespaces)
+        switch trimmedValue {
         case Constants.move:
             self = .move
         case Constants.left:
@@ -37,8 +38,7 @@ extension Command {
             self = .report
         default:
             let pattern = "^\(Constants.place) (\\d),(\\d),(\\w+)$"
-            //+ #"(\d),(\d),(\w+)$"# // Swift 5 raw string literal
-            if let captures = pattern.firstMatchCaptures(in: value), captures.count == 3 {
+            if let captures = pattern.firstMatchCaptures(in: trimmedValue), captures.count == 3 {
                 if let x = Int(captures[0]), let y = Int(captures[1]), let f = Facing(rawValue: captures[2]) {
                     self = .place(x: x, y: y, f: f)
                     return
